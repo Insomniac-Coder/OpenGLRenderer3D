@@ -11,6 +11,8 @@ public:
 	void Clear(float red, float green, float blue, float alpha);
 	bool WindowClosed();
 	virtual ~Display();
+	float CamMovement = 0;
+	bool movement = false;
 
 private:
 	SDL_Window* window;

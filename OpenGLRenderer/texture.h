@@ -3,11 +3,14 @@
 #include <string>
 #include <glew.h>
 #include "stb_image.h"
+#include <cassert>
+#include <iostream>
 
 class Texture {
 public:
-	Texture(const std::string& fileName);
-	void Bind(unsigned short unit);
+	std::string textureAddress;
+	Texture(const std::string& texAddress);
+	void TextureBind(unsigned short unit);
 	virtual ~Texture();
 private:
 	Texture(const Texture& other) {}

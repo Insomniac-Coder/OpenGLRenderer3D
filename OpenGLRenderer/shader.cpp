@@ -15,12 +15,16 @@ Shader::Shader(const std::string& fileName){
 	}
 
 	glBindAttribLocation(program, 0, "position");
+	glBindAttribLocation(program, 1, "texCoord");
+	glBindAttribLocation(program, 2, "normal");
 
 	glLinkProgram(program);
 	CheckShaderError(program, GL_LINK_STATUS, true, "Error: Program linking failed! : ");
 
 	glValidateProgram(program);
 	CheckShaderError(program, GL_VALIDATE_STATUS, true, "Error: Program validation failed! : ");
+
+	uniforms[TRANSFORM_UNIFORM] = glGetUniformLocation(program, "transform");
 
 }
 
@@ -33,9 +37,17 @@ Shader::~Shader() {
 	glDeleteProgram(program);
 }
 
-void Shader::Bind() {
+void Shader::ShaderBind() {
 	glUseProgram(program);
 }
+
+void Shader::ShaderUpdate(const Transform& transform, const Camera& camera) {
+
+	glm::mat4 model = camera.GetViewProjection() * transform.GetModel();
+
+	glUniformMatrix4fv(uniforms[TRANSFORM_UNIFORM], 1, GL_FALSE, &model[0][0]);
+}
+
 static GLuint CreateShader(const std::string& text, GLenum ShaderType) {
 	GLuint shader = glCreateShader(ShaderType);
 
